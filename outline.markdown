@@ -112,7 +112,8 @@ Here is a non-exhaustive list of the assertions you'll commonly use:
 * `assert_no_match(regexp, string, [msg])` : Ensures that a string doesn’t matches the regular expression.
 * `assert_nil(obj, [msg])` : Ensures that obj.nil? is true.
 * `assert_not_nil(obj, [msg])` : Ensures that obj.nil? is false.
-* `assert_raise(except1, except2, ...)  { block }` :Ensures that the given block raises one of the given exceptions.
+* `assert_raise(except1, except2, ...)  { block }` : Ensures that the given block raises one of the given exceptions.
+* `assert_nothing_raised(exception1, ...) { block }` : Ensures that the given block doesn’t raise one of the given exceptions.
 * `assert_respond_to(obj, symbol, [msg])` : Ensures that obj has a method called symbol.
 
 ### Setup & Teardown
@@ -137,6 +138,71 @@ On the other end of the test is the `teardown` method which will be run after ea
 
 ## Practice
 
+Let's put it into practice. We'll use the JSAttend project already developed as our muse.
+
+### Setup
+
+In the same project directory as JSAttend, let's create a folder named `test` and a file within that folder named `jsattend_test.rb`
+
+Open that file and add this frame:
+
+```ruby
+require "test/unit"
+
+class JSAttendTest < Test::Unit::TestCase
+  def test_truth
+    assert(true)
+  end
+end
+```
+
+The `test_truth` method is obviously silly, it's just to check that things are working ok on your system. Open a command prompt window and move to your project directory, then execute the test:
+
+```bash
+ruby test/jsattend_test.rb
+```
+
+You should then see this output:
+
+```
+Loaded suite test/jsattend_test
+Started
+.
+Finished in 0.000172 seconds.
+
+1 tests, 1 assertions, 0 failures, 0 errors
+```
+
+Now you're ready to start testing!
+
+### Exercises
+
+Write tests that exercise the following functionality:
+
+* Ensure that the `clean_phone_number` method:
+  * removes periods
+  * removes hyphens
+  * returns a string made up of only digits when given digits with many symbols
+  * returns the invalid phone number marker when given a 12 digit number
+  * returns the invalid phone number marker when given a 9 digit number
+  * returns the number as-is when given a 10 digit number
+  * chops the leading one off an 11 digit number starting with a one
+  * returns the invalid phone number marker when give an 11 digit number that starts with something other than a one
+  * does not raise an exception with passed `nil` *(Requires new application code)*
+  * returns the invalid phone number marker when passed `nil` *(Requires new application code)*
+* Ensure that the `clean_zipcode` method:
+  * does not change a five digit zipcode
+  * pads a four digit input with a leading zero
+  * pads a three digit input with a leading zero
+  * does not raise an exception with passed `nil`
+  * returns the invalid zipcode marker when passed `nil`
+* Ensure that the `csv_file` method:
+  * Returns a `FasterCSV` instance
+  * Starts at the beginning of the file, ie: has the `lineno` attribute set to zero
+* Ensure that the `.new` method:
+  * Raises an `Errno::ENOENT` exception when given a filename that doesn't exist
+  * Does not raise an error when given a valid filename
+ 
 # Introducing Watir
 ## Setup
 ### Browser
