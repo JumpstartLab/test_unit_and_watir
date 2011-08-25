@@ -32,7 +32,7 @@ browser = Watir::Browser.new
 browser.goto 'http://jumpstartlab.com'
 ```
 
-A Firefox window should be opened and it'll attempt to connect to Google, even if you don't have internet access.
+A Firefox window should be opened and it'll attempt to load the Jumpstart Lab page.
 
 ## Commands
 
@@ -60,6 +60,8 @@ You can search the page for HTML elements using methods like these:
 browser.link(:href, '/courses/ruby')
 browser.div(:id, 'content')
 ```
+
+Within the element query method, you can use `:id` to find by the CSS ID, `:class` to find by the CSS class, `:name` to match the HTML name attribute, `:href` to match link paths, and `:xpath` if all else fails.
 
 The selector doesn't actually match the content until you try to interact with it. One way to do that is with the `exists?` method:
 
@@ -203,3 +205,5 @@ Reload the current page with `.refresh`:
 > browser.refresh
  => [] 
 ```
+
+That's it!
