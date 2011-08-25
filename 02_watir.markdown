@@ -2,7 +2,7 @@
 
 Watir, short for "Web Application Testing in Ruby", is a library for driving a web browser from Ruby. It has a very small API for loading pages, interacting with form elements, and querying for content.
 
-The base Watir library is written for Internet Explorer on Windows. We'll instead use FireWatir which uses Firefox and runs on Windows, Mac OS, and Linux.
+The base Watir library is written for Internet Explorer on Windows. We'll instead use Watir-Webdriver which can use Firefox, Chrome, or Safari and runs on Windows, Mac OS, and Linux.
 
 ## Setup
 
@@ -38,32 +38,133 @@ A Firefox window should be opened and it'll attempt to connect to Google, even i
 
 Let's take a look at the commands available with the Watir browser.
 
+### Reference
+
+The best reference for using Watir is the Watir-Webdriver API documentation here: http://rubydoc.info/gems/watir-webdriver
+
+In particular you'll call a lot of methods on an instance of the `Browser` class: http://rubydoc.info/gems/watir-webdriver/0.3.2/Watir/Browser
+
 ### Loading and Closing Pages
 
 Use `browser.goto(address)` to load a page where `address` is the full URL you want to load.
 
 Use `browser.close` to close the window.
 
-### Querying
+### Finding Elements
 
 Once you have a page loaded you'll want to interact with the contents and elements.
-
-#### Finding Elements
-
-[TODO: Notes about selectors when I can find some proper documentation]
 
 You can search the page for HTML elements using methods like these:
 
 ```ruby
-b.link(:href, 'http://google.com')
+browser.link(:href, 'http://google.com')
+browser.div(:id, 'content')
 ```
 
-#### Finding Text
+#### Element Contents
 
-[TODO: Notes about selectors when I can find some proper documentation]
+Once you find an element you often want to check out its contents.
 
-#### Window Title
+The `.html` method will return the HTML of the selected element. For example:
 
-### Clicking
-#### Links
-#### Buttons
+```irb
+> browser.link(:id, "training-banner").html
+ => "<a style=\"\" id=\"training-banner\" href=\"/custom\"><big>Custom Training</big> <em>for</em> <big>Your Team</big></a>"
+```
+
+If you just want the visible text contents of the element, then the `.text` method fits the bill:
+
+```irb
+> browser.link(:id, "training-banner").text
+ => "Custom Training for Your Team"
+```
+
+The element's HTML and any HTML tags inside the element are stripped away. This is ideal if you're checking the content of an element and don't need to detect details like span tags or other formatting.
+
+#### Scoping
+
+Frequently you will want to select elements within elements. You can chain the element methods to achieve a scoped search like this:
+
+```irb
+> browser.div(:id, "footer").link(:href, 'http://twitter.com/jumpstartlab').text
+ => "@JumpstartLab"
+```
+
+Here the link will only be matched inside the `'footer'` div. If we try altering it to the `'header'` div there will be no match:
+
+```irb
+ > browser.div(:id, "header").link(:href, 'http://twitter.com/jumpstartlab').text
+Watir::Exception::UnknownObjectException: unable to locate element, using {:tag_name=>"a", :href=>"http://twitter.com/jumpstartlab"}
+```
+
+### Clicking Links
+
+Clicking a link is simple, find the link element then call `.click` like this:
+
+```ruby
+browser.link(:href, '/courses/ruby').click
+```
+
+### Forms
+
+You can use Watir to interact with forms, enter content, and submit data.
+
+Find a text field element with `text_field` and change the contents with `set`:
+
+```irb
+> browser.text_field(:name, 'EMAIL').set("sample@sample.com")
+=> "" 
+```
+
+Find other form elements with the methods `.textarea`, `.radio`, `.checkbox`, `.select`, and `.button`.
+
+Submit a form by either selecting the `.button` and calling `.click` or selecting the `.form` and calling `.submit`.
+
+### Matching Groups
+
+Most of the elements can be matched by group. For instance:
+
+```irb
+ > browser.links
+ => #<Watir::AnchorCollection:0x10fb6a930 @parent=#<Watir::Browser:0x10fa91a68 url="http://jumpstartlab.com/" title="The Best Ruby on Rails Training - Jumpstart Lab">, @selector={:tag_name=>"a"}> 
+ > browser.links.count
+ => 18 
+ > browser.div(:id, 'footer').links
+ => #<Watir::AnchorCollection:0x10fb52b28 @parent=#<Watir::Div:0x10fb52c18 located=false selector={:tag_name=>"div", :id=>"footer"}>, @selector={:tag_name=>"a"}> 
+ > browser.div(:id, 'footer').links.count
+ => 2 
+```
+
+Some of the other plural methods include `divs`, `spans`, `checkboxes`, `lis` and so on. If there's a singular, just pluralize the selector to find multiple matches.
+
+### Browser Attributes & Manipulation
+
+Check the current URL with `.url`:
+
+```irb
+> browser.url
+=> "http://jumpstartlab.com/"
+```
+
+Check the current window title with `.title`:
+
+```irb
+> browser.title
+=> "The Best Ruby on Rails Training - Jumpstart Lab"
+```
+
+Move back and forward through the history:
+
+```ruby
+> browser.back
+=> "" 
+> browser.forward
+=> "" 
+```
+
+Reload the current page with `.refresh`:
+
+```irb
+> browser.refresh
+ => [] 
+```
