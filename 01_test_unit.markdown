@@ -53,7 +53,7 @@ The class will inherit from `Test::Unit::TestCase`, so we have access to all the
 
 Then within that class we'll write individual methods as our test scenarios:
 
-```
+```ruby
 def test_hello
 
 end
@@ -72,7 +72,7 @@ Assertions are the meat of a test. Assertions determine weather the test passes 
 
 The most basic assertion is the `assert` method. For instance:
 
-```
+```ruby
 def test_hello
   assert("hello".class == String)
 end
@@ -84,7 +84,7 @@ If the contained expression is true, the test passes. If it's false or raises an
 
 Though `assert` can be used to test just about anything, there are many other assertions that can be more convenient. For instance, the above example could be rewritten using `assert_instance_of`:
 
-```
+```ruby
 def test_hello
   assert_instance_of(String, "hello")
 end
@@ -92,7 +92,7 @@ end
 
 Experienced Rubyists will leave off the parentheses to get a more sentence-like flow:
 
-```
+```ruby
 def test_hello
   assert_instance_of String, "hello"
 end
@@ -127,7 +127,7 @@ class TestSample < Test::Unit::TestCase
   end
   
   def test_hello
-    assert_instance_of String, @sample_date
+    assert_instance_of String, @sample_data
   end
 end
 ```
@@ -158,7 +158,7 @@ end
 
 The `test_truth` method is obviously silly, it's just to check that things are working ok on your system. Open a command prompt window and move to your project directory, then execute the test:
 
-```bash
+```
 ruby test/jsattend_test.rb
 ```
 
