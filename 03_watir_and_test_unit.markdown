@@ -40,3 +40,16 @@ Particularly when using `assert`, you'll want to make use of these common Ruby m
 ## Practice
 
 Now, let's practice with the sample application!
+
+Here's some things to write tests for:
+
+* Ensure that
+ * you can submit a new posting
+ * you can follow the links of posts
+ * when you post a link, it makes a new one
+
+Let's try doing a feature by writing the tests first! Many people think this is the best way to test.
+
+* Write a test that checks for the existance of a timestamp on an individual post's page
+* Next, run the test, and watch it fail!
+* Now write the code that you think will make your test pass.
